@@ -1,0 +1,16 @@
+参考链接：https://www.jianshu.com/p/134461a82600?utm_campaign=hugo&utm_medium=reader_share&utm_content=note&utm_source=weixin-timeline&from=timeline&isappinstalled=0
+使用过程：（预装python3.6.3）
+直接去目录 ./wechat_jump_game-master/Tools/adb/ 下打开命令行(对于华为荣耀9，目前几个python脚本都不太好用，
+  还是上面给的链接里贴出的版本比较好：jump.py)
+遇到的最大的问题是找不着设备：手机打开开发者模式（设置->关于手机->在版本号处点7下，会提示“已经处于开发者模式”->退回上一级“设置”出现“开发者选项”->
+  打开USB调试），USB设置为MTP(设备文件管理)即可。手机连接电脑后，只提示了USB连接方式，并没有USB授权之类的弹出。然后adb devices一直提示找不到设备。
+虽然在设备管理器中见到了"通用串行总线控制器->USB Composite Device"以及“其他设备->HDB Interface”，也按网上的说法
+  在C:\Users\lenovo\.android\adb_usb.ini添加了硬件ID信息，重启adb，仍然找不到设备。
+后来发现驱动装的不对，双击HDB Interface后更新驱动，浏览本地计算机，选择Android Phone, 下一步，选择Android ADP Interface，安装即可。这时设备管理器
+  中出现了Xiaoqy-PC下的Android Phone。我又在C盘搜索到android_winusb.inf文件，加入了以下信息：
+[Google.NTx86]
+;My HuaWei Honor 9
+%CompositeAdbInterface%     = USB_Install, USB\USB\VID_12D1&PID_107E
+%SingleAdbInterface% = USB_Install, USB\USB\VID_12D1&PID_107E&REV_0299&MI_02
+之后安装python的依赖包，pip install -r requirements.txt
+这以后，重新连接手机，弹出电脑对USB的授权，确认，就可以使用了：打开微信跳一跳，运行jump.py，直到你想停下~哈哈
